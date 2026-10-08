@@ -1,0 +1,68 @@
+{
+  "name": "advacedframework",
+  "version": "1.0.0",
+  "description": "Playwright automation framework project",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:chrome": "playwright test --project=chromium",
+    "test:allure": "playwright test --reporter=line,allure-playwright",
+    "report": "playwright show-report playwright-reporter",
+    "allure:report": "npx allure generate allure-results --clean -o allure-report",
+    "install:browsers": "playwright install",
+    "install:deps": "playwright install --with-deps",
+    "test:codegen": "playwright codegen",
+    "logs:show": "node -e \"const fs=require('fs'); const p='logs/app.log'; console.log(fs.existsSync(p)?fs.readFileSync(p,'utf8'):'No log file yet');\""
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "testing",
+    "e2e",
+    "framework"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "allure-commandline": "^2.46.1",
+    "allure-playwright": "^3.13.0",
+    "@faker-js/faker": "^9.9.0",
+    "csv": "^6.6.4",
+    "dotenv": "^17.4.2",
+    "winston": "^3.19.0",
+    "xlsx": "^0.18.5"
+  },
+  "config": {
+    "playwright": {
+      "testDir": "./src/tests",
+      "fullyParallel": true,
+      "reporter": [
+        [
+          "html",
+          {
+            "open": "always"
+          }
+        ]
+      ],
+      "use": {
+        "trace": "on-first-retry",
+        "screenshot": "only-on-failure",
+        "video": "retain-on-failure",
+        "headless": true
+      }
+    },
+    "logging": {
+      "defaultLevel": "info",
+      "logFile": "logs/app.log"
+    }
+  }
+}
