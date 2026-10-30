@@ -6,41 +6,28 @@ A Playwright-based end-to-end automation framework written in TypeScript. It inc
 
 ```text
 .
-├── .agent/
-│   └── rules/                  # Agent guidance
-├── .cursor/
-│   └── rules/                  # Cursor guidance
 ├── .github/
 │   ├── workflows/
 │   │   └── playwright.yml      # CI test workflow
-│   └── copilot-instructions.md # Copilot guidance
-├── .windsurf/
-│   └── rules/                  # Windsurf guidance
-├── DokcerFile/
-│   └── .gitkeep                # Empty directory placeholder
-├── docs/
-│   └── Phase One/
-│       └── prompts.md          # Captured Phase One request
-├── Rule/
-│   └── README.md               # Test-file validation guidance
 ├── src/
-│   ├── api/                    # API helpers (placeholder)
-│   ├── config/                 # Test/framework configuration (placeholder)
-│   ├── fixtures/               # Shared Playwright fixtures (placeholder)
-│   ├── pages/                  # Page objects (placeholder)
-│   ├── testdata/               # Test data (placeholder)
+│   ├── config/                 # Test configuration and data
+│   ├── fixtures/               # Shared Playwright fixtures
+│   ├── pages/                  # Page objects for the shopping workflow
 │   ├── tests/
-│   │   └── example.spec.ts     # Example end-to-end tests
+│   │   ├── e2e-checkout.spec.ts
+│   │   └── example.spec.ts
 │   └── Utils/
-│       └── CustomReportet.ts   # Custom Playwright reporter
+│       ├── CustomTTAReporter.ts
+│       ├── DataGenerator.ts
+│       ├── Logger.ts
+│       └── UtiliElementLocators.ts
 ├── .gitignore
 ├── package.json                # Scripts and dependencies
-├── package-lock.json
 ├── playwright.config.ts        # Playwright projects and reporters
 └── tsconfig.json               # TypeScript compiler options
 ```
 
-The `src/api`, `src/config`, `src/fixtures`, `src/pages`, and `src/testdata` directories currently contain only `.gitkeep` placeholders so the framework layout is preserved in Git. Add the corresponding helpers, fixtures, page objects, and data as the project grows.
+The framework uses shared fixtures, page objects, data-generation and logging utilities, and a custom reporter to support end-to-end checkout tests.
 
 ## Prerequisites
 
@@ -66,15 +53,24 @@ npm run test:chrome       # Run the Chromium project
 npm run test:allure       # Run tests with line and Allure reporters
 ```
 
-The test suite is configured in `playwright.config.ts`, with tests under `src/tests`. The current project targets Chromium using the installed Chrome channel.
+The test suite is configured in `playwright.config.ts`, with tests under `src/tests`. The current project targets Chromium using the installed Chrome channel, runs headed with a 1420 × 870 viewport, and runs test files in parallel by default. On CI, retries are enabled and the worker count is limited to one.
+
+Set `BASE_URL` to run against a different environment. By default, tests use `https://app.thetestingacademy.com/playwright/ttacart`.
 
 ## Reports
 
-The Playwright configuration writes an HTML report to `playwright-reporter/`, JSON results to `test-results/results.json`, and Allure results to `allure-results/`. The GitHub Actions workflow uploads the Playwright report as an artifact.
+The default Playwright configuration writes an HTML report to `playwright-reporter/`, JSON results to `test-results/results.json`, Allure results to `allure-results/`, and output from the custom reporter. The `test:allure` script runs with line and Allure reporters. The GitHub Actions workflow uploads the HTML report as an artifact.
 
 ```sh
 npm run report             # Open the configured Playwright HTML report
 npm run allure:report      # Generate an Allure report from allure-results
+```
+
+## Code quality
+
+```sh
+npm run typecheck          # Check TypeScript types
+npm run lint               # Run ESLint
 ```
 
 ## Continuous integration
